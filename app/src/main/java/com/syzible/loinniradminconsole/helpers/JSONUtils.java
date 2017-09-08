@@ -1,4 +1,4 @@
-package com.syzible.loinniradminconsole;
+package com.syzible.loinniradminconsole.helpers;
 
 import android.content.Context;
 

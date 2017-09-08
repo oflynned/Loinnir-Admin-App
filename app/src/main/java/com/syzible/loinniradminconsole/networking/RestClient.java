@@ -1,4 +1,4 @@
-package com.syzible.loinniradminconsole;
+package com.syzible.loinniradminconsole.networking;
 
 import android.content.Context;
 import android.os.Looper;
