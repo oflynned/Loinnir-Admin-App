@@ -11,6 +11,10 @@ import org.json.JSONObject;
 
 public class JSONUtils {
 
+    public static JSONObject getAuthPayload(Context context) {
+        return getAuthPayload(context, LocalPrefs.getUsername(context), LocalPrefs.getSecret(context));
+    }
+
     public static JSONObject getAuthPayload(Context context, String username, String secret) {
         JSONObject o = new JSONObject();
         try {
