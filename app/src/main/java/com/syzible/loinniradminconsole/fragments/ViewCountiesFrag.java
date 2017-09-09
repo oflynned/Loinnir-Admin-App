@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
@@ -17,15 +18,12 @@ import com.syzible.loinniradminconsole.R;
 import com.syzible.loinniradminconsole.helpers.JSONUtils;
 import com.syzible.loinniradminconsole.networking.Endpoints;
 import com.syzible.loinniradminconsole.networking.RestClient;
-import com.syzible.loinniradminconsole.objects.PushNotification;
+import com.syzible.loinniradminconsole.objects.Locality;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -33,21 +31,17 @@ import cz.msebera.android.httpclient.Header;
  * Created by ed on 08/09/2017.
  */
 
-public class OldPushNotificationsFrag extends Fragment {
-
-    private View view;
+public class ViewCountiesFrag extends Fragment {
 
     private RecyclerView recyclerView;
-    private ArrayList<PushNotification> pushNotifications = new ArrayList<>();
+    private ArrayList<Locality> localities = new ArrayList<>();
     private PushNotificationsAdapter adapter;
-
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.card_recycle_view, container, false);
-
+        View view = inflater.inflate(R.layout.card_recycle_view, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.card_recycler_view);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -73,28 +67,20 @@ public class OldPushNotificationsFrag extends Fragment {
 
     private void loadData() {
         RestClient.post(getActivity(),
-                Endpoints.GET_ALL_PUSH_NOTIFICATIONS,
+                Endpoints.GET_AREA_DATA,
                 JSONUtils.getAuthPayload(getActivity()),
                 new BaseJsonHttpResponseHandler<JSONArray>() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONArray response) {
-                        pushNotifications.clear();
+                        localities.clear();
 
-                        if (response.length() == 0) {
-                            pushNotifications.add(new PushNotification(
-                                    "No Previous Push Notifications!",
-                                    "Add one now by selecting new push notification under tools"));
-                        } else {
-                            for (int i = 0; i < response.length(); i++) {
-                                try {
-                                    pushNotifications.add(new PushNotification(response.getJSONObject(i)));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                localities.add(new Locality(getActivity(), response.getJSONObject(i)));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                         }
-
-                        Collections.reverse(pushNotifications);
 
                         adapter = new PushNotificationsAdapter();
                         recyclerView.setAdapter(adapter);
@@ -128,37 +114,35 @@ public class OldPushNotificationsFrag extends Fragment {
 
         @Override
         public void onBindViewHolder(CardViewHolder holder, int position) {
-            PushNotification notification = pushNotifications.get(position);
-            holder.title.setText(notification.getTitle());
-            holder.content.setText(notification.getContent());
-            holder.broadcastTime.setText(getDate(notification.getTimeCreated()));
-            holder.viewershipStats.setText("User count: " + notification.getUserCount() +
-                    " / Users delivered to: " + notification.getUsersDeliveredTo());
+            Locality locality = localities.get(position);
+            holder.title.setText(locality.getTown());
+            holder.content.setText(locality.getCounty());
+            holder.flag.setImageResource(locality.getFlag());
         }
 
         @Override
         public int getItemCount() {
-            return pushNotifications.size();
-        }
-
-        public String getDate(long milliSeconds) {
-            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd/MM/yyyy");
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(milliSeconds);
-            return formatter.format(calendar.getTime());
+            return localities.size();
         }
 
         class CardViewHolder extends RecyclerView.ViewHolder {
             CardView cardView;
-            TextView title, content, broadcastTime, viewershipStats;
+            TextView title, content, broadcastTime, userStats;
+            ImageView flag;
 
             CardViewHolder(View itemView) {
                 super(itemView);
                 cardView = (CardView) itemView.findViewById(R.id.old_push_notification_card);
                 title = (TextView) itemView.findViewById(R.id.card_title);
                 content = (TextView) itemView.findViewById(R.id.card_content);
+
                 broadcastTime = (TextView) itemView.findViewById(R.id.card_broadcast_time);
-                viewershipStats = (TextView) itemView.findViewById(R.id.card_user_stats);
+                userStats = (TextView) itemView.findViewById(R.id.card_user_stats);
+
+                broadcastTime.setVisibility(View.GONE);
+                userStats.setVisibility(View.GONE);
+
+                flag = (ImageView) itemView.findViewById(R.id.card_icon);
             }
         }
 

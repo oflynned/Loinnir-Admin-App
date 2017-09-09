@@ -29,7 +29,8 @@ public class Endpoints {
     public static final String CLEAR_DUD_ACCOUNTS = API_URL + "/clear-dud-accounts";
     public static final String CLEAR_LOCALITY_CHATS = API_URL + "/clear-locality-chats";
 
-    public static final String GET_LOCALITY_NAMES = API_URL + "/get-locality-names";
+    public static final String GET_AREA_DATA = API_URL + "/get-area-data";
+
     public static final String GET_LOCALITY_MESSAGES_BY_LOCALITY = API_URL + "/get-locality-chat-by-name";
     public static final String GET_ALL_LOCALITY_MESSAGES = API_URL + "/get-all-locality-conversations";
     public static final String GET_LOCALITY_MESSAGES_LAST_24_HOURS = API_URL + "/locality-messages-last-24-hours";

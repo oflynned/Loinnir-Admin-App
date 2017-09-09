@@ -38,6 +38,38 @@ public class ToolsFrag extends Fragment {
             }
         });
 
+        Button showLocalitiesFragment = (Button) view.findViewById(R.id.button_view_localities);
+        showLocalitiesFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentUtils.setFragmentBackstack(getFragmentManager(), new ViewLocalitiesFrag());
+            }
+        });
+
+        Button showCountiesFragment = (Button) view.findViewById(R.id.button_view_counties);
+        showCountiesFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentUtils.setFragmentBackstack(getFragmentManager(), new ViewCountiesFrag());
+            }
+        });
+
+        Button deleteUserButton = (Button) view.findViewById(R.id.button_delete_user);
+        deleteUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        Button deleteLocalityChat = (Button) view.findViewById(R.id.button_locality_chat);
+        deleteLocalityChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         return view;
     }
 }

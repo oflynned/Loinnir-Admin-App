@@ -1,8 +1,10 @@
 package com.syzible.loinniradminconsole.fragments;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -92,44 +94,66 @@ public class NewPushNotificationFrag extends Fragment {
                 if (!areFieldsAcceptable()) {
                     Toast.makeText(getActivity(), "Fields unacceptable, make sure title and content have text", Toast.LENGTH_SHORT).show();
                 } else {
-                    JSONObject payload = new JSONObject();
-                    try {
-                        payload.put("username", LocalPrefs.getUsername(getActivity()));
-                        payload.put("secret", LocalPrefs.getSecret(getActivity()));
-                        payload.put("push_notification_title", getTitleField());
-                        payload.put("push_notification_content", getContentField());
-                        payload.put("push_notification_link", getUrlField());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    RestClient.post(getActivity(),
-                            Endpoints.BROADCAST_PUSH_NOTIFICATION,
-                            payload,
-                            new BaseJsonHttpResponseHandler<JSONObject>() {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Confirm Dispatch Push Notification")
+                            .setMessage(
+                                    "Notification Title:\n" + getTitleField() +
+                                    "\n\nNotification Content:\n" + getContentField() +
+                                    "\n\nNotification Link:\n" + getUrlField())
+                            .setPositiveButton("Dispatch", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONObject response) {
-                                    pnTitleEditText.setText(null);
-                                    pnContentEditText.setText(null);
-                                    pnUrlEditText.setText(null);
-                                    Toast.makeText(getActivity(), "Sent!", Toast.LENGTH_SHORT).show();
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dispatchPushNotification();
                                 }
-
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, JSONObject errorResponse) {
+                                public void onClick(DialogInterface dialog, int which) {
 
                                 }
-
-                                @Override
-                                protected JSONObject parseResponse(String rawJsonData, boolean isFailure) throws Throwable {
-                                    return new JSONObject(rawJsonData);
-                                }
-                            });
+                            })
+                            .show();
                 }
             }
         });
 
         return view;
+    }
+
+    private void dispatchPushNotification() {
+        JSONObject payload = new JSONObject();
+        try {
+            payload.put("username", LocalPrefs.getUsername(getActivity()));
+            payload.put("secret", LocalPrefs.getSecret(getActivity()));
+            payload.put("push_notification_title", getTitleField());
+            payload.put("push_notification_content", getContentField());
+            payload.put("push_notification_link", getUrlField());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RestClient.post(getActivity(),
+                Endpoints.BROADCAST_PUSH_NOTIFICATION,
+                payload,
+                new BaseJsonHttpResponseHandler<JSONObject>() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONObject response) {
+                        pnTitleEditText.setText(null);
+                        pnContentEditText.setText(null);
+                        pnUrlEditText.setText(null);
+                        Toast.makeText(getActivity(), "Sent!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, JSONObject errorResponse) {
+
+                    }
+
+                    @Override
+                    protected JSONObject parseResponse(String rawJsonData, boolean isFailure) throws Throwable {
+                        return new JSONObject(rawJsonData);
+                    }
+                });
     }
 
     private String getTitleField() {
