@@ -35,6 +35,7 @@ public class ViewCountiesFrag extends Fragment {
 
     private RecyclerView recyclerView;
     private ArrayList<Locality> localities = new ArrayList<>();
+    private ArrayList<String> addedCounties = new ArrayList<>();
     private PushNotificationsAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -73,10 +74,23 @@ public class ViewCountiesFrag extends Fragment {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONArray response) {
                         localities.clear();
+                        addedCounties.clear();
 
+                        boolean wasAdded = false;
                         for (int i = 0; i < response.length(); i++) {
                             try {
-                                localities.add(new Locality(getActivity(), response.getJSONObject(i)));
+                                String county = response.getJSONObject(i).getString("county");
+
+                                for (String addedCounty : addedCounties)
+                                    if (addedCounty.equals(county))
+                                        wasAdded = true;
+
+                                if (!wasAdded) {
+                                    localities.add(new Locality(getActivity(), response.getJSONObject(i)));
+                                    addedCounties.add(county);
+                                }
+
+                                wasAdded = false;
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -115,8 +129,8 @@ public class ViewCountiesFrag extends Fragment {
         @Override
         public void onBindViewHolder(CardViewHolder holder, int position) {
             Locality locality = localities.get(position);
-            holder.title.setText(locality.getTown());
-            holder.content.setText(locality.getCounty());
+            holder.title.setText(locality.getCounty());
+            holder.content.setText(locality.getCountyCount() + " users in this county");
             holder.flag.setImageResource(locality.getFlag());
         }
 
