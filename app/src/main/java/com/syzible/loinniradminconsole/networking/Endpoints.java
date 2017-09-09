@@ -11,7 +11,7 @@ public class Endpoints {
 
     private static final String LOCAL_ENDPOINT = "http://10.0.2.2:3000";
     private static final String REMOTE_ENDPOINT = "https://loinnir.herokuapp.com";
-    private static final String STEM_URL = isDebugMode() ? LOCAL_ENDPOINT : REMOTE_ENDPOINT;
+    public static final String STEM_URL = isDebugMode() ? LOCAL_ENDPOINT : REMOTE_ENDPOINT;
     private static final String API_URL = STEM_URL + "/api/v" + API_VERSION + "/admin";
 
     public static boolean isDebugMode() {

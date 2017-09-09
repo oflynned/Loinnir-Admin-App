@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.syzible.loinniradminconsole.fragments.StatisticsFrag;
+import com.syzible.loinniradminconsole.fragments.ToolsFrag;
 import com.syzible.loinniradminconsole.helpers.FragmentUtils;
 
 public class MainActivity extends AppCompatActivity
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationView.getMenu().getItem(0).setChecked(true);
-        FragmentUtils.setFragment(getFragmentManager(), new StatisticsFrag());
+        FragmentUtils.setFragment(getFragmentManager(), new ToolsFrag());
     }
 
     @Override
@@ -77,15 +78,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_statistics) {
+            FragmentUtils.setFragment(getFragmentManager(), new StatisticsFrag());
+        } else if (id == R.id.nav_locality_chats) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_tools) {
+            FragmentUtils.setFragment(getFragmentManager(), new ToolsFrag());
+        } else if (id == R.id.nav_store) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_log_out) {
 
         }
 

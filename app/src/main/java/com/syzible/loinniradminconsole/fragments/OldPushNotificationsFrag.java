@@ -7,14 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.syzible.loinniradminconsole.R;
+
 /**
  * Created by ed on 08/09/2017.
  */
 
-public class PushNotificationsFrag extends Fragment {
+public class OldPushNotificationsFrag extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return inflater.inflate(R.layout.old_push_notifications_frag, container, false);
     }
 }
