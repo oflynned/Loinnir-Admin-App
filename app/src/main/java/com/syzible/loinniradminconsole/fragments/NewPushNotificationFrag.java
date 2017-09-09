@@ -15,8 +15,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.syzible.loinniradminconsole.R;
+import com.syzible.loinniradminconsole.helpers.LocalPrefs;
 import com.syzible.loinniradminconsole.networking.Endpoints;
+import com.syzible.loinniradminconsole.networking.RestClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by ed on 08/09/2017.
@@ -84,10 +92,39 @@ public class NewPushNotificationFrag extends Fragment {
                 if (!areFieldsAcceptable()) {
                     Toast.makeText(getActivity(), "Fields unacceptable, make sure title and content have text", Toast.LENGTH_SHORT).show();
                 } else {
-                    pnTitleEditText.setText(null);
-                    pnContentEditText.setText(null);
-                    pnUrlEditText.setText(null);
-                    Toast.makeText(getActivity(), "Sent!", Toast.LENGTH_SHORT).show();
+                    JSONObject payload = new JSONObject();
+                    try {
+                        payload.put("username", LocalPrefs.getUsername(getActivity()));
+                        payload.put("secret", LocalPrefs.getSecret(getActivity()));
+                        payload.put("push_notification_title", getTitleField());
+                        payload.put("push_notification_content", getContentField());
+                        payload.put("push_notification_link", getUrlField());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    RestClient.post(getActivity(),
+                            Endpoints.BROADCAST_PUSH_NOTIFICATION,
+                            payload,
+                            new BaseJsonHttpResponseHandler<JSONObject>() {
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONObject response) {
+                                    pnTitleEditText.setText(null);
+                                    pnContentEditText.setText(null);
+                                    pnUrlEditText.setText(null);
+                                    Toast.makeText(getActivity(), "Sent!", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, JSONObject errorResponse) {
+
+                                }
+
+                                @Override
+                                protected JSONObject parseResponse(String rawJsonData, boolean isFailure) throws Throwable {
+                                    return new JSONObject(rawJsonData);
+                                }
+                            });
                 }
             }
         });

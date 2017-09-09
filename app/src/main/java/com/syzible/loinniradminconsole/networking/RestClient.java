@@ -27,7 +27,6 @@ public class RestClient {
 
     public static void post(Context context, String url, JSONObject data, AsyncHttpResponseHandler responseHandler) {
         try {
-            System.out.println(url);
             getClient().post(context, url, new StringEntity(data.toString()), "application/json", responseHandler);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
