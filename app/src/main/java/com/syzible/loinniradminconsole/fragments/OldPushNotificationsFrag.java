@@ -1,6 +1,7 @@
 package com.syzible.loinniradminconsole.fragments;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -42,6 +43,7 @@ public class OldPushNotificationsFrag extends Fragment {
     private PushNotificationsAdapter adapter;
 
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -56,6 +58,7 @@ public class OldPushNotificationsFrag extends Fragment {
         adapter = new PushNotificationsAdapter();
         recyclerView.setAdapter(adapter);
 
+        progressDialog = new ProgressDialog(getActivity());
         loadData();
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.card_container_layout);
@@ -72,6 +75,10 @@ public class OldPushNotificationsFrag extends Fragment {
     }
 
     private void loadData() {
+        progressDialog.cancel();
+        progressDialog.setMessage("Loading old push notifications...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         RestClient.post(getActivity(),
                 Endpoints.GET_ALL_PUSH_NOTIFICATIONS,
                 JSONUtils.getAuthPayload(getActivity()),
@@ -99,11 +106,12 @@ public class OldPushNotificationsFrag extends Fragment {
                         adapter = new PushNotificationsAdapter();
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
+                        progressDialog.cancel();
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, JSONArray errorResponse) {
-
+                        progressDialog.cancel();
                     }
 
                     @Override
@@ -131,9 +139,15 @@ public class OldPushNotificationsFrag extends Fragment {
             PushNotification notification = pushNotifications.get(position);
             holder.title.setText(notification.getTitle());
             holder.content.setText(notification.getContent());
-            holder.broadcastTime.setText(getDate(notification.getTimeCreated()));
-            holder.viewershipStats.setText("User count: " + notification.getUserCount() +
-                    " / Users delivered to: " + notification.getUsersDeliveredTo());
+
+            if (!notification.isEmptyPlaceholder()) {
+                holder.broadcastTime.setText(getDate(notification.getTimeCreated()));
+                holder.viewershipStats.setText("User count: " + notification.getUserCount() +
+                        " / Users delivered to: " + notification.getUsersDeliveredTo());
+            } else {
+                holder.broadcastTime.setVisibility(View.GONE);
+                holder.viewershipStats.setVisibility(View.GONE);
+            }
         }
 
         @Override

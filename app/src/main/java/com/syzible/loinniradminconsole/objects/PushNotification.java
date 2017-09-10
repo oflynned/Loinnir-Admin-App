@@ -14,6 +14,7 @@ public class PushNotification {
     private String title, content, url;
     private long timeCreated;
     private int userCount, usersDeliveredTo;
+    private boolean isEmptyPlaceholder;
 
     public PushNotification(JSONObject o) {
         try {
@@ -23,6 +24,7 @@ public class PushNotification {
             this.timeCreated = o.getLong("broadcast_time");
             this.userCount = o.getInt("user_count_at_this_time");
             this.usersDeliveredTo = o.getInt("user_count_delivered_to");
+            this.isEmptyPlaceholder = false;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -31,6 +33,11 @@ public class PushNotification {
     public PushNotification(String title, String content) {
         this.title = title;
         this.content = content;
+        this.isEmptyPlaceholder = true;
+    }
+
+    public boolean isEmptyPlaceholder() {
+        return isEmptyPlaceholder;
     }
 
     public String getTitle() {

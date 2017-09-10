@@ -1,6 +1,7 @@
 package com.syzible.loinniradminconsole.fragments;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,15 +35,15 @@ import cz.msebera.android.httpclient.Header;
 
 public class NewPushNotificationFrag extends Fragment {
 
-    private View view;
-    private Button pnDispatchButton;
     private EditText pnTitleEditText, pnContentEditText, pnUrlEditText;
     private TextView pnPreviewCardTitle, pnPreviewCardContent;
+    private ProgressDialog progressDialog;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.new_push_notification_frag, container, false);
+        View view = inflater.inflate(R.layout.new_push_notification_frag, container, false);
+        progressDialog = new ProgressDialog(getActivity());
 
         pnTitleEditText = (EditText) view.findViewById(R.id.new_push_notification_et_title);
         pnContentEditText = (EditText) view.findViewById(R.id.new_push_notification_et_content);
@@ -87,7 +88,7 @@ public class NewPushNotificationFrag extends Fragment {
             }
         });
 
-        pnDispatchButton = (Button) view.findViewById(R.id.button_dispatch_new_push_notification);
+        Button pnDispatchButton = (Button) view.findViewById(R.id.button_dispatch_new_push_notification);
         pnDispatchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +133,11 @@ public class NewPushNotificationFrag extends Fragment {
             e.printStackTrace();
         }
 
+        progressDialog.cancel();
+        progressDialog.setMessage("Broadcasting push notification...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         RestClient.post(getActivity(),
                 Endpoints.BROADCAST_PUSH_NOTIFICATION,
                 payload,
@@ -142,11 +148,13 @@ public class NewPushNotificationFrag extends Fragment {
                         pnContentEditText.setText(null);
                         pnUrlEditText.setText(null);
                         Toast.makeText(getActivity(), "Sent!", Toast.LENGTH_SHORT).show();
+                        progressDialog.cancel();
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, JSONObject errorResponse) {
-
+                        Toast.makeText(getActivity(), "Error on broadcasting push notification", Toast.LENGTH_SHORT).show();
+                        progressDialog.cancel();
                     }
 
                     @Override

@@ -21,6 +21,11 @@ public class Locality {
             this.county = o.getString("county");
             this.town = o.getString("locality");
             this.flag = getCountyFlag(context, county);
+
+            if (o.has("locality_count"))
+                this.townCount = o.getInt("locality_count");
+            if (o.has("county_count"))
+                this.countyCount = o.getInt("county_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }

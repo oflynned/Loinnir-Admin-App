@@ -19,10 +19,10 @@ import com.syzible.loinniradminconsole.R;
 import com.syzible.loinniradminconsole.helpers.JSONUtils;
 import com.syzible.loinniradminconsole.networking.Endpoints;
 import com.syzible.loinniradminconsole.networking.RestClient;
-import com.syzible.loinniradminconsole.objects.Locality;
+import com.syzible.loinniradminconsole.objects.Statistic;
 
-import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -32,12 +32,12 @@ import cz.msebera.android.httpclient.Header;
  * Created by ed on 08/09/2017.
  */
 
-public class ViewCountiesFrag extends Fragment {
+public class MessageStatsFrag extends Fragment {
 
     private RecyclerView recyclerView;
-    private ArrayList<Locality> localities = new ArrayList<>();
-    private ArrayList<String> addedCounties = new ArrayList<>();
+    private ArrayList<Statistic> statistics = new ArrayList<>();
     private PushNotificationsAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressDialog progressDialog;
 
     @Nullable
@@ -51,11 +51,11 @@ public class ViewCountiesFrag extends Fragment {
 
         adapter = new PushNotificationsAdapter();
         recyclerView.setAdapter(adapter);
-
         progressDialog = new ProgressDialog(getActivity());
+
         loadData();
 
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.card_container_layout);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.card_container_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -64,45 +64,36 @@ public class ViewCountiesFrag extends Fragment {
             }
         });
 
+
         return view;
     }
 
     private void loadData() {
         progressDialog.cancel();
-        progressDialog.setMessage("Loading county data...");
+        progressDialog.setMessage("Loading locality data...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-
         RestClient.post(getActivity(),
-                Endpoints.GET_AREA_DATA,
+                Endpoints.GET_MESSAGE_STATS,
                 JSONUtils.getAuthPayload(getActivity()),
-                new BaseJsonHttpResponseHandler<JSONArray>() {
+                new BaseJsonHttpResponseHandler<JSONObject>() {
                     @Override
-                    public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONArray response) {
-                        localities.clear();
-                        addedCounties.clear();
+                    public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONObject response) {
+                        statistics.clear();
+                        System.out.println(response);
 
-                        boolean wasAdded = false;
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                String county = response.getJSONObject(i).getString("county");
-
-                                for (String addedCounty : addedCounties)
-                                    if (addedCounty.equals(county))
-                                        wasAdded = true;
-
-                                if (!wasAdded) {
-                                    localities.add(new Locality(getActivity(), response.getJSONObject(i)));
-                                    addedCounties.add(county);
-                                }
-
-                                wasAdded = false;
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } finally {
-                                progressDialog.cancel();
+                        try {
+                            for (int i = 0; i < response.names().length(); i++) {
+                                String key = response.names().getString(i);
+                                int value = response.getInt(response.names().getString(i));
+                                String count = value + (value == 1 ? " message" : " messages");
+                                statistics.add(new Statistic(key, count));
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
+                        progressDialog.cancel();
 
                         adapter = new PushNotificationsAdapter();
                         recyclerView.setAdapter(adapter);
@@ -110,13 +101,13 @@ public class ViewCountiesFrag extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, JSONArray errorResponse) {
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, JSONObject errorResponse) {
                         progressDialog.cancel();
                     }
 
                     @Override
-                    protected JSONArray parseResponse(String rawJsonData, boolean isFailure) throws Throwable {
-                        return new JSONArray(rawJsonData);
+                    protected JSONObject parseResponse(String rawJsonData, boolean isFailure) throws Throwable {
+                        return new JSONObject(rawJsonData);
                     }
                 });
     }
@@ -136,16 +127,14 @@ public class ViewCountiesFrag extends Fragment {
 
         @Override
         public void onBindViewHolder(CardViewHolder holder, int position) {
-            Locality locality = localities.get(position);
-            holder.title.setText(locality.getCounty());
-            holder.content.setText(locality.getCountyCount() +
-                    (locality.getCountyCount() == 1 ? " user " : " users ") + "in this county");
-            holder.flag.setImageResource(locality.getFlag());
+            Statistic statistic = statistics.get(position);
+            holder.title.setText(statistic.getKey());
+            holder.content.setText(statistic.getValue());
         }
 
         @Override
         public int getItemCount() {
-            return localities.size();
+            return statistics.size();
         }
 
         class CardViewHolder extends RecyclerView.ViewHolder {
@@ -160,13 +149,13 @@ public class ViewCountiesFrag extends Fragment {
                 content = (TextView) itemView.findViewById(R.id.card_content);
 
                 broadcastTime = (TextView) itemView.findViewById(R.id.card_broadcast_time);
-                userStats = (TextView) itemView.findViewById(R.id.card_user_stats);
-
                 broadcastTime.setVisibility(View.GONE);
+
+                userStats = (TextView) itemView.findViewById(R.id.card_user_stats);
                 userStats.setVisibility(View.GONE);
 
                 flag = (ImageView) itemView.findViewById(R.id.card_icon);
-                flag.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_corners_background));
+                flag.setVisibility(View.GONE);
             }
         }
 

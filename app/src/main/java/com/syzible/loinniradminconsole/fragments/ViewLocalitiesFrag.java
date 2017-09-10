@@ -1,6 +1,7 @@
 package com.syzible.loinniradminconsole.fragments;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,6 +38,7 @@ public class ViewLocalitiesFrag extends Fragment {
     private ArrayList<Locality> localities = new ArrayList<>();
     private PushNotificationsAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -49,6 +51,7 @@ public class ViewLocalitiesFrag extends Fragment {
 
         adapter = new PushNotificationsAdapter();
         recyclerView.setAdapter(adapter);
+        progressDialog = new ProgressDialog(getActivity());
 
         loadData();
 
@@ -66,6 +69,10 @@ public class ViewLocalitiesFrag extends Fragment {
     }
 
     private void loadData() {
+        progressDialog.cancel();
+        progressDialog.setMessage("Loading locality data...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         RestClient.post(getActivity(),
                 Endpoints.GET_AREA_DATA,
                 JSONUtils.getAuthPayload(getActivity()),
@@ -79,6 +86,8 @@ public class ViewLocalitiesFrag extends Fragment {
                                 localities.add(new Locality(getActivity(), response.getJSONObject(i)));
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            } finally {
+                                progressDialog.cancel();
                             }
                         }
 
@@ -89,7 +98,7 @@ public class ViewLocalitiesFrag extends Fragment {
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, JSONArray errorResponse) {
-
+                        progressDialog.cancel();
                     }
 
                     @Override
@@ -117,7 +126,8 @@ public class ViewLocalitiesFrag extends Fragment {
             Locality locality = localities.get(position);
             holder.title.setText(locality.getTown());
             holder.content.setText(locality.getCounty());
-            holder.broadcastTime.setText(locality.getTownCount() + " users in this locality");
+            holder.broadcastTime.setText(locality.getCountyCount() +
+                    (locality.getTownCount() == 1 ? " user " : " users ") + "in this locality");
             holder.flag.setImageResource(locality.getFlag());
         }
 
@@ -143,6 +153,7 @@ public class ViewLocalitiesFrag extends Fragment {
                 userStats.setVisibility(View.GONE);
 
                 flag = (ImageView) itemView.findViewById(R.id.card_icon);
+                flag.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_corners_background));
             }
         }
 

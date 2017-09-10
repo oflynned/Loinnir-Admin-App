@@ -54,6 +54,7 @@
             android:textSize="18sp" />
 
         <LinearLayout
+            android:id="@+id/area_stats_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/info_area_title">
@@ -71,6 +72,26 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="View Counties" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/area_stats_area">
+
+            <Button
+                android:id="@+id/button_view_user_stats"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="View User Stats" />
+
+            <Button
+                android:id="@+id/button_view_message_stats"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="View Message Stats" />
         </LinearLayout>
     </RelativeLayout>
 

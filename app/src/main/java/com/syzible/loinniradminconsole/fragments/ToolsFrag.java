@@ -54,6 +54,22 @@ public class ToolsFrag extends Fragment {
             }
         });
 
+        Button showUserStatsFragment = (Button) view.findViewById(R.id.button_view_user_stats);
+        showUserStatsFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentUtils.setFragmentBackstack(getFragmentManager(), new UserStatsFrag());
+            }
+        });
+
+        Button showMessageStatsFragment = (Button) view.findViewById(R.id.button_view_message_stats);
+        showMessageStatsFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentUtils.setFragmentBackstack(getFragmentManager(), new MessageStatsFrag());
+            }
+        });
+
         Button deleteUserButton = (Button) view.findViewById(R.id.button_delete_user);
         deleteUserButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -30,6 +30,8 @@ public class Endpoints {
     public static final String CLEAR_LOCALITY_CHATS = API_URL + "/clear-locality-chats";
 
     public static final String GET_AREA_DATA = API_URL + "/get-area-data";
+    public static final String GET_USER_STATS = API_URL + "/get-user-stats";
+    public static final String GET_MESSAGE_STATS = API_URL + "/get-message-stats";
 
     public static final String GET_LOCALITY_MESSAGES_BY_LOCALITY = API_URL + "/get-locality-chat-by-name";
     public static final String GET_ALL_LOCALITY_MESSAGES = API_URL + "/get-all-locality-conversations";
