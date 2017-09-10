@@ -2,9 +2,11 @@ package com.syzible.loinniradminconsole.fragments;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,16 +14,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.syzible.loinniradminconsole.R;
 import com.syzible.loinniradminconsole.helpers.JSONUtils;
+import com.syzible.loinniradminconsole.helpers.LocalPrefs;
 import com.syzible.loinniradminconsole.networking.Endpoints;
 import com.syzible.loinniradminconsole.networking.RestClient;
 import com.syzible.loinniradminconsole.objects.PushNotification;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,7 +45,7 @@ public class OldPushNotificationsFrag extends Fragment {
 
     private RecyclerView recyclerView;
     private ArrayList<PushNotification> pushNotifications = new ArrayList<>();
-    private PushNotificationsAdapter adapter;
+    private Adapter adapter;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressDialog progressDialog;
@@ -55,7 +60,7 @@ public class OldPushNotificationsFrag extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new PushNotificationsAdapter();
+        adapter = new Adapter();
         recyclerView.setAdapter(adapter);
 
         progressDialog = new ProgressDialog(getActivity());
@@ -103,7 +108,7 @@ public class OldPushNotificationsFrag extends Fragment {
 
                         Collections.reverse(pushNotifications);
 
-                        adapter = new PushNotificationsAdapter();
+                        adapter = new Adapter();
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         progressDialog.cancel();
@@ -121,12 +126,53 @@ public class OldPushNotificationsFrag extends Fragment {
                 });
     }
 
-    class PushNotificationsAdapter extends RecyclerView.Adapter<PushNotificationsAdapter.CardViewHolder> {
+    private void dispatchPushNotification(PushNotification notification) {
+        JSONObject payload = new JSONObject();
+        try {
+            payload.put("username", LocalPrefs.getUsername(getActivity()));
+            payload.put("secret", LocalPrefs.getSecret(getActivity()));
+            payload.put("push_notification_title", notification.getTitle());
+            payload.put("push_notification_content", notification.getContent());
+            payload.put("push_notification_link", notification.getUrl());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        progressDialog.cancel();
+        progressDialog.setMessage("Broadcasting push notification...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        RestClient.post(getActivity(),
+                Endpoints.BROADCAST_PUSH_NOTIFICATION,
+                payload,
+                new BaseJsonHttpResponseHandler<JSONObject>() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONObject response) {
+                        Toast.makeText(getActivity(), "Sent!", Toast.LENGTH_SHORT).show();
+                        progressDialog.cancel();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, String rawJsonData, JSONObject errorResponse) {
+                        Toast.makeText(getActivity(), "Error on broadcasting push notification", Toast.LENGTH_SHORT).show();
+                        progressDialog.cancel();
+                    }
+
+                    @Override
+                    protected JSONObject parseResponse(String rawJsonData, boolean isFailure) throws Throwable {
+                        return new JSONObject(rawJsonData);
+                    }
+                });
+    }
+
+    class Adapter extends RecyclerView.Adapter<Adapter.CardViewHolder> {
+        private View view;
 
         @Override
         public CardViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card, parent, false);
-            return new CardViewHolder(v);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card, parent, false);
+            return new CardViewHolder(view);
         }
 
         @Override
@@ -136,7 +182,7 @@ public class OldPushNotificationsFrag extends Fragment {
 
         @Override
         public void onBindViewHolder(CardViewHolder holder, int position) {
-            PushNotification notification = pushNotifications.get(position);
+            final PushNotification notification = pushNotifications.get(position);
             holder.title.setText(notification.getTitle());
             holder.content.setText(notification.getContent());
 
@@ -148,6 +194,34 @@ public class OldPushNotificationsFrag extends Fragment {
                 holder.broadcastTime.setVisibility(View.GONE);
                 holder.viewershipStats.setVisibility(View.GONE);
             }
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Resend Push Notification?")
+                            .setMessage(
+                                    "Click broadcast to confirm sending this push notification again." +
+                                            "\n\nNotification Title:\n" + notification.getTitle() +
+                                            "\n\nNotification Content:\n" + notification.getContent() +
+                                            "\n\nNotification Link:\n" + notification.getUrl()
+                            )
+                            .setPositiveButton("Broadcast", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dispatchPushNotification(notification);
+                                    loadData();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .show();
+                }
+            });
         }
 
         @Override

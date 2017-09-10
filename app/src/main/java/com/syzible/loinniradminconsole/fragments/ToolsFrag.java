@@ -70,16 +70,16 @@ public class ToolsFrag extends Fragment {
             }
         });
 
-        Button deleteUserButton = (Button) view.findViewById(R.id.button_delete_user);
-        deleteUserButton.setOnClickListener(new View.OnClickListener() {
+        Button userIntensitySpread = (Button) view.findViewById(R.id.button_user_intensity_spread);
+        userIntensitySpread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
 
-        Button deleteLocalityChat = (Button) view.findViewById(R.id.button_locality_chat);
-        deleteLocalityChat.setOnClickListener(new View.OnClickListener() {
+        Button localitySpread = (Button) view.findViewById(R.id.button_locality_spread);
+        localitySpread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

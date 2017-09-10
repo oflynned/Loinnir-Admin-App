@@ -36,7 +36,7 @@ public class ViewLocalitiesFrag extends Fragment {
 
     private RecyclerView recyclerView;
     private ArrayList<Locality> localities = new ArrayList<>();
-    private PushNotificationsAdapter adapter;
+    private Adapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressDialog progressDialog;
 
@@ -49,7 +49,7 @@ public class ViewLocalitiesFrag extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new PushNotificationsAdapter();
+        adapter = new Adapter();
         recyclerView.setAdapter(adapter);
         progressDialog = new ProgressDialog(getActivity());
 
@@ -91,7 +91,7 @@ public class ViewLocalitiesFrag extends Fragment {
                             }
                         }
 
-                        adapter = new PushNotificationsAdapter();
+                        adapter = new Adapter();
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }
@@ -108,7 +108,7 @@ public class ViewLocalitiesFrag extends Fragment {
                 });
     }
 
-    class PushNotificationsAdapter extends RecyclerView.Adapter<PushNotificationsAdapter.CardViewHolder> {
+    class Adapter extends RecyclerView.Adapter<Adapter.CardViewHolder> {
 
         @Override
         public CardViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
@@ -126,7 +126,7 @@ public class ViewLocalitiesFrag extends Fragment {
             Locality locality = localities.get(position);
             holder.title.setText(locality.getTown());
             holder.content.setText(locality.getCounty());
-            holder.broadcastTime.setText(locality.getCountyCount() +
+            holder.broadcastTime.setText(locality.getTownCount() +
                     (locality.getTownCount() == 1 ? " user " : " users ") + "in this locality");
             holder.flag.setImageResource(locality.getFlag());
         }

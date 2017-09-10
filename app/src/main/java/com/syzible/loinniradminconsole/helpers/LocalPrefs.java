@@ -12,12 +12,24 @@ public class LocalPrefs {
         is_authenticated, username, secret
     }
 
-    public static void setPreference(Context context, Prefs pref, boolean value) {
+    public static void logOut(Context context) {
+        setPreference(context, Prefs.username, null);
+        setPreference(context, Prefs.secret, null);
+        setPreference(context, Prefs.is_authenticated, false);
+    }
+
+    public static void login(Context context, String username, String secret) {
+        setPreference(context, Prefs.username, username);
+        setPreference(context, Prefs.secret, secret);
+        setPreference(context, Prefs.is_authenticated, true);
+    }
+
+    private static void setPreference(Context context, Prefs pref, boolean value) {
         PreferenceManager.getDefaultSharedPreferences(context).edit()
                 .putBoolean(pref.name(), value).apply();
     }
 
-    public static void setPreference(Context context, Prefs pref, String value) {
+    private static void setPreference(Context context, Prefs pref, String value) {
         PreferenceManager.getDefaultSharedPreferences(context).edit()
                 .putString(pref.name(), value).apply();
     }

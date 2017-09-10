@@ -11,10 +11,10 @@ public class Endpoints {
 
     private static final String LOCAL_ENDPOINT = "http://10.0.2.2:3000";
     private static final String REMOTE_ENDPOINT = "https://loinnir.herokuapp.com";
-    public static final String STEM_URL = isDebugMode() ? LOCAL_ENDPOINT : REMOTE_ENDPOINT;
+    private static final String STEM_URL = isDebugMode() ? LOCAL_ENDPOINT : REMOTE_ENDPOINT;
     private static final String API_URL = STEM_URL + "/api/v" + API_VERSION + "/admin";
 
-    public static boolean isDebugMode() {
+    private static boolean isDebugMode() {
         return Build.FINGERPRINT.startsWith("generic")
                 || Build.FINGERPRINT.startsWith("unknown")
                 || Build.MODEL.contains("google_sdk")
@@ -26,8 +26,6 @@ public class Endpoints {
     }
 
     public static final String AUTHENTICATE = API_URL + "/authenticate";
-    public static final String CLEAR_DUD_ACCOUNTS = API_URL + "/clear-dud-accounts";
-    public static final String CLEAR_LOCALITY_CHATS = API_URL + "/clear-locality-chats";
 
     public static final String GET_AREA_DATA = API_URL + "/get-area-data";
     public static final String GET_USER_STATS = API_URL + "/get-user-stats";

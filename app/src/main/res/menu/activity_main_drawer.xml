@@ -7,10 +7,6 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="Tools" />
         <item
-            android:id="@+id/nav_statistics"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Statistics" />
-        <item
             android:id="@+id/nav_locality_chats"
             android:icon="@drawable/ic_menu_manage"
             android:title="Locality Chats" />

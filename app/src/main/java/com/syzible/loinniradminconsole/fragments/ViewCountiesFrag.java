@@ -37,7 +37,7 @@ public class ViewCountiesFrag extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<Locality> localities = new ArrayList<>();
     private ArrayList<String> addedCounties = new ArrayList<>();
-    private PushNotificationsAdapter adapter;
+    private Adapter adapter;
     private ProgressDialog progressDialog;
 
     @Nullable
@@ -49,7 +49,7 @@ public class ViewCountiesFrag extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new PushNotificationsAdapter();
+        adapter = new Adapter();
         recyclerView.setAdapter(adapter);
 
         progressDialog = new ProgressDialog(getActivity());
@@ -104,7 +104,7 @@ public class ViewCountiesFrag extends Fragment {
                             }
                         }
 
-                        adapter = new PushNotificationsAdapter();
+                        adapter = new Adapter();
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }
@@ -121,7 +121,7 @@ public class ViewCountiesFrag extends Fragment {
                 });
     }
 
-    class PushNotificationsAdapter extends RecyclerView.Adapter<PushNotificationsAdapter.CardViewHolder> {
+    class Adapter extends RecyclerView.Adapter<Adapter.CardViewHolder> {
 
         @Override
         public CardViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {

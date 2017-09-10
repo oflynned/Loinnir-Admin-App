@@ -75,6 +75,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/user_message_stats_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/area_stats_area">
@@ -93,41 +94,61 @@
                 android:layout_weight="1"
                 android:text="View Message Stats" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_message_stats_area">
+
+            <Button
+                android:id="@+id/button_users_per_locality"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Users per Locality" />
+
+            <Button
+                android:id="@+id/button_users_per_county"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Users per County" />
+        </LinearLayout>
     </RelativeLayout>
 
 
     <RelativeLayout
-        android:id="@+id/danger_area"
+        android:id="@+id/map_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp">
 
         <TextView
-            android:id="@+id/danger_area_title"
+            android:id="@+id/maps_area_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Danger Area"
+            android:text="Maps Area"
             android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/danger_area_title">
+            android:layout_below="@+id/maps_area_title">
 
             <Button
-                android:id="@+id/button_delete_user"
+                android:id="@+id/button_user_intensity_spread"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Delete User Account" />
+                android:text="User Intensity Spread" />
 
             <Button
-                android:id="@+id/button_locality_chat"
+                android:id="@+id/button_locality_spread"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Delete Locality Chat" />
+                android:text="Locality Area Spread" />
         </LinearLayout>
     </RelativeLayout>
 

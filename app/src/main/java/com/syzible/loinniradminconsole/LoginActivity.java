@@ -51,15 +51,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (validateFields(username, secret)) {
                     final Context context = LoginActivity.this;
                     JSONObject payload = JSONUtils.getAuthPayload(context, username, secret);
-                    System.out.println(payload);
-                    System.out.println(Endpoints.AUTHENTICATE);
                     RestClient.post(context, Endpoints.AUTHENTICATE, payload, new BaseJsonHttpResponseHandler<JSONObject>() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONObject response) {
-                            System.out.println(response);
-                            LocalPrefs.setPreference(context, LocalPrefs.Prefs.username, username);
-                            LocalPrefs.setPreference(context, LocalPrefs.Prefs.secret, secret);
-                            LocalPrefs.setPreference(context, LocalPrefs.Prefs.is_authenticated, true);
+                            LocalPrefs.login(context, username, secret);
                             startMainActivity(context);
                         }
 

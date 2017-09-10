@@ -19,15 +19,12 @@ import com.syzible.loinniradminconsole.R;
 import com.syzible.loinniradminconsole.helpers.JSONUtils;
 import com.syzible.loinniradminconsole.networking.Endpoints;
 import com.syzible.loinniradminconsole.networking.RestClient;
-import com.syzible.loinniradminconsole.objects.Locality;
 import com.syzible.loinniradminconsole.objects.Statistic;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -39,7 +36,7 @@ public class UserStatsFrag extends Fragment {
 
     private RecyclerView recyclerView;
     private ArrayList<Statistic> statistics = new ArrayList<>();
-    private PushNotificationsAdapter adapter;
+    private Adapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressDialog progressDialog;
 
@@ -52,7 +49,7 @@ public class UserStatsFrag extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new PushNotificationsAdapter();
+        adapter = new Adapter();
         recyclerView.setAdapter(adapter);
         progressDialog = new ProgressDialog(getActivity());
 
@@ -73,7 +70,7 @@ public class UserStatsFrag extends Fragment {
 
     private void loadData() {
         progressDialog.cancel();
-        progressDialog.setMessage("Loading locality data...");
+        progressDialog.setMessage("Loading user count data...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         RestClient.post(getActivity(),
@@ -96,7 +93,7 @@ public class UserStatsFrag extends Fragment {
 
                         progressDialog.cancel();
 
-                        adapter = new PushNotificationsAdapter();
+                        adapter = new Adapter();
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }
@@ -113,7 +110,7 @@ public class UserStatsFrag extends Fragment {
                 });
     }
 
-    class PushNotificationsAdapter extends RecyclerView.Adapter<PushNotificationsAdapter.CardViewHolder> {
+    class Adapter extends RecyclerView.Adapter<Adapter.CardViewHolder> {
 
         @Override
         public CardViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {

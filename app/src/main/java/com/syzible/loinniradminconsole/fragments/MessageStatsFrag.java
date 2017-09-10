@@ -36,7 +36,7 @@ public class MessageStatsFrag extends Fragment {
 
     private RecyclerView recyclerView;
     private ArrayList<Statistic> statistics = new ArrayList<>();
-    private PushNotificationsAdapter adapter;
+    private Adapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressDialog progressDialog;
 
@@ -49,7 +49,7 @@ public class MessageStatsFrag extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new PushNotificationsAdapter();
+        adapter = new Adapter();
         recyclerView.setAdapter(adapter);
         progressDialog = new ProgressDialog(getActivity());
 
@@ -70,7 +70,7 @@ public class MessageStatsFrag extends Fragment {
 
     private void loadData() {
         progressDialog.cancel();
-        progressDialog.setMessage("Loading locality data...");
+        progressDialog.setMessage("Loading message count data...");
         progressDialog.setCancelable(false);
         progressDialog.show();
         RestClient.post(getActivity(),
@@ -95,7 +95,7 @@ public class MessageStatsFrag extends Fragment {
 
                         progressDialog.cancel();
 
-                        adapter = new PushNotificationsAdapter();
+                        adapter = new Adapter();
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }
@@ -112,7 +112,7 @@ public class MessageStatsFrag extends Fragment {
                 });
     }
 
-    class PushNotificationsAdapter extends RecyclerView.Adapter<PushNotificationsAdapter.CardViewHolder> {
+    class Adapter extends RecyclerView.Adapter<Adapter.CardViewHolder> {
 
         @Override
         public CardViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
