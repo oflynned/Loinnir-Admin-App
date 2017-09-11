@@ -4,24 +4,19 @@ package com.syzible.loinniradminconsole.objects;
  * Created by ed on 10/09/2017.
  */
 
-public class Statistic {
-    private String key, value;
+public class Statistic extends CardItem {
 
     public Statistic(String key, String value) {
-        this.key = key;
-        this.value = value;
+        super(key, value);
     }
 
-    public String getKey() {
-        return formatTitle();
+    @Override
+    public String getTitle() {
+        return formatTitle(super.getTitle());
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    private String formatTitle() {
-        String[] words = key.split("_");
+    private String formatTitle(String title) {
+        String[] words = title.split("_");
         String output = "";
         for (String word : words)
             output += String.valueOf(word.charAt(0)).toUpperCase() + word.substring(1) + " ";

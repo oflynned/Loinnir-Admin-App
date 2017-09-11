@@ -1,34 +1,28 @@
 package com.syzible.loinniradminconsole.objects;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+
+import com.syzible.loinniradminconsole.helpers.LocalPrefs;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by ed on 08/09/2017.
  */
 
-public class Locality {
-    private String county, town;
-    private int flag, countyCount, townCount;
+public class Locality extends CardItem {
 
-    public Locality(Context context, JSONObject o) {
-        try {
-            this.county = o.getString("county");
-            this.town = o.getString("locality");
-            this.flag = getCountyFlag(context, county);
+    public Locality(Context context, JSONObject o) throws JSONException {
+        this(o.getString("county").equals("abroad") ? "Éire" : o.getString("county"),
+                o.getString("locality").equals("abroad") ? "Abroad" : o.getString("locality"),
+                o.getInt("locality_count") + (o.getInt("locality_count") == 1 ? " user " : " users ") + "in this locality",
+                o.getInt("county_count") + (o.getInt("county_count") == 1 ? " user " : " users ") + "in this county",
+                getCountyFlag(context, o.getString("county").equals("abroad") ? "Éire" : o.getString("county")));
+    }
 
-            if (o.has("locality_count"))
-                this.townCount = o.getInt("locality_count");
-            if (o.has("county_count"))
-                this.countyCount = o.getInt("county_count");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    private Locality(String county, String town, String townCount, String countyCount, int flag) {
+        super(county, town, String.valueOf(townCount), String.valueOf(countyCount), flag);
     }
 
     private static String getCountyFileName(String county) {
@@ -38,30 +32,8 @@ public class Locality {
                 .replace("ú", "u");
     }
 
-    private int getCountyFlag(Context context, String county) {
-        if (county.equals("abroad"))
-            this.county = "Éire";
-        String countyFlagFile = getCountyFileName(this.county);
+    private static int getCountyFlag(Context context, String county) {
+        String countyFlagFile = getCountyFileName(county);
         return context.getResources().getIdentifier(countyFlagFile, "drawable", context.getPackageName());
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public String getTown() {
-        return town;
-    }
-
-    public int getFlag() {
-        return flag;
-    }
-
-    public int getCountyCount() {
-        return countyCount;
-    }
-
-    public int getTownCount() {
-        return townCount;
     }
 }

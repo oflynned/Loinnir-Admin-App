@@ -5,21 +5,20 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.syzible.loinniradminconsole.R;
 import com.syzible.loinniradminconsole.helpers.JSONUtils;
 import com.syzible.loinniradminconsole.networking.Endpoints;
 import com.syzible.loinniradminconsole.networking.RestClient;
+import com.syzible.loinniradminconsole.objects.CardItem;
 import com.syzible.loinniradminconsole.objects.Statistic;
+import com.syzible.loinniradminconsole.views.CardViewAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,8 +34,8 @@ import cz.msebera.android.httpclient.Header;
 public class UserStatsFrag extends Fragment {
 
     private RecyclerView recyclerView;
-    private ArrayList<Statistic> statistics = new ArrayList<>();
-    private Adapter adapter;
+    private ArrayList<CardItem> userStatistics = new ArrayList<>();
+    private CardViewAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressDialog progressDialog;
 
@@ -49,7 +48,7 @@ public class UserStatsFrag extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new Adapter();
+        adapter = new CardViewAdapter();
         recyclerView.setAdapter(adapter);
         progressDialog = new ProgressDialog(getActivity());
 
@@ -79,13 +78,13 @@ public class UserStatsFrag extends Fragment {
                 new BaseJsonHttpResponseHandler<JSONObject>() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONObject response) {
-                        statistics.clear();
+                        userStatistics.clear();
 
                         try {
                             for (int i = 0; i < response.names().length(); i++) {
                                 String key = response.names().getString(i);
                                 String value = response.getString(response.names().getString(i));
-                                statistics.add(new Statistic(key, value));
+                                userStatistics.add(new Statistic(key, value));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -93,7 +92,7 @@ public class UserStatsFrag extends Fragment {
 
                         progressDialog.cancel();
 
-                        adapter = new Adapter();
+                        adapter = new CardViewAdapter(userStatistics);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }
@@ -108,54 +107,5 @@ public class UserStatsFrag extends Fragment {
                         return new JSONObject(rawJsonData);
                     }
                 });
-    }
-
-    class Adapter extends RecyclerView.Adapter<Adapter.CardViewHolder> {
-
-        @Override
-        public CardViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card, parent, false);
-            return new CardViewHolder(v);
-        }
-
-        @Override
-        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-            super.onAttachedToRecyclerView(recyclerView);
-        }
-
-        @Override
-        public void onBindViewHolder(CardViewHolder holder, int position) {
-            Statistic statistic = statistics.get(position);
-            holder.title.setText(statistic.getKey());
-            holder.content.setText(statistic.getValue());
-        }
-
-        @Override
-        public int getItemCount() {
-            return statistics.size();
-        }
-
-        class CardViewHolder extends RecyclerView.ViewHolder {
-            CardView cardView;
-            TextView title, content, broadcastTime, userStats;
-            ImageView flag;
-
-            CardViewHolder(View itemView) {
-                super(itemView);
-                cardView = (CardView) itemView.findViewById(R.id.old_push_notification_card);
-                title = (TextView) itemView.findViewById(R.id.card_title);
-                content = (TextView) itemView.findViewById(R.id.card_content);
-
-                broadcastTime = (TextView) itemView.findViewById(R.id.card_broadcast_time);
-                broadcastTime.setVisibility(View.GONE);
-
-                userStats = (TextView) itemView.findViewById(R.id.card_user_stats);
-                userStats.setVisibility(View.GONE);
-
-                flag = (ImageView) itemView.findViewById(R.id.card_icon);
-                flag.setVisibility(View.GONE);
-            }
-        }
-
     }
 }

@@ -19,7 +19,9 @@ import com.syzible.loinniradminconsole.R;
 import com.syzible.loinniradminconsole.helpers.JSONUtils;
 import com.syzible.loinniradminconsole.networking.Endpoints;
 import com.syzible.loinniradminconsole.networking.RestClient;
+import com.syzible.loinniradminconsole.objects.CardItem;
 import com.syzible.loinniradminconsole.objects.Locality;
+import com.syzible.loinniradminconsole.views.CardViewAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,8 +37,8 @@ import cz.msebera.android.httpclient.Header;
 public class ViewLocalitiesFrag extends Fragment {
 
     private RecyclerView recyclerView;
-    private ArrayList<Locality> localities = new ArrayList<>();
-    private Adapter adapter;
+    private ArrayList<CardItem> localities = new ArrayList<>();
+    private CardViewAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressDialog progressDialog;
 
@@ -49,7 +51,7 @@ public class ViewLocalitiesFrag extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new Adapter();
+        adapter = new CardViewAdapter();
         recyclerView.setAdapter(adapter);
         progressDialog = new ProgressDialog(getActivity());
 
@@ -91,7 +93,7 @@ public class ViewLocalitiesFrag extends Fragment {
                             }
                         }
 
-                        adapter = new Adapter();
+                        adapter = new CardViewAdapter(localities);
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }
@@ -106,56 +108,5 @@ public class ViewLocalitiesFrag extends Fragment {
                         return new JSONArray(rawJsonData);
                     }
                 });
-    }
-
-    class Adapter extends RecyclerView.Adapter<Adapter.CardViewHolder> {
-
-        @Override
-        public CardViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card, parent, false);
-            return new CardViewHolder(v);
-        }
-
-        @Override
-        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-            super.onAttachedToRecyclerView(recyclerView);
-        }
-
-        @Override
-        public void onBindViewHolder(CardViewHolder holder, int position) {
-            Locality locality = localities.get(position);
-            holder.title.setText(locality.getTown());
-            holder.content.setText(locality.getCounty());
-            holder.broadcastTime.setText(locality.getTownCount() +
-                    (locality.getTownCount() == 1 ? " user " : " users ") + "in this locality");
-            holder.flag.setImageResource(locality.getFlag());
-        }
-
-        @Override
-        public int getItemCount() {
-            return localities.size();
-        }
-
-        class CardViewHolder extends RecyclerView.ViewHolder {
-            CardView cardView;
-            TextView title, content, broadcastTime, userStats;
-            ImageView flag;
-
-            CardViewHolder(View itemView) {
-                super(itemView);
-                cardView = (CardView) itemView.findViewById(R.id.old_push_notification_card);
-                title = (TextView) itemView.findViewById(R.id.card_title);
-                content = (TextView) itemView.findViewById(R.id.card_content);
-
-                broadcastTime = (TextView) itemView.findViewById(R.id.card_broadcast_time);
-                userStats = (TextView) itemView.findViewById(R.id.card_user_stats);
-
-                userStats.setVisibility(View.GONE);
-
-                flag = (ImageView) itemView.findViewById(R.id.card_icon);
-                flag.setBackground(getActivity().getResources().getDrawable(R.drawable.rounded_corners_background));
-            }
-        }
-
     }
 }
