@@ -29,7 +29,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardVi
     }
 
     public CardViewAdapter(ArrayList<CardItem> list) {
-        this.list = list;
+        this(list, null);
     }
 
     public CardViewAdapter(ArrayList<CardItem> list, Callback callback) {
@@ -55,20 +55,20 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardVi
         CardItem item = list.get(position);
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
-        holder.flag.setImageResource(item.getIcon());
+        holder.icon.setImageResource(item.getIcon());
 
         if (item.shouldDrawBackground())
-            holder.flag.setBackground(context.getResources().getDrawable(R.drawable.rounded_corners_background));
+            holder.icon.setBackground(context.getResources().getDrawable(R.drawable.rounded_corners_background));
 
         if (item.getSubContent() == null)
-            holder.broadcastTime.setVisibility(View.GONE);
+            holder.subcontent.setVisibility(View.GONE);
         else
-            holder.broadcastTime.setText(item.getSubContent());
+            holder.subcontent.setText(item.getSubContent());
 
         if (item.getSubsubContent() == null)
-            holder.userStats.setVisibility(View.GONE);
+            holder.subsubcontent.setVisibility(View.GONE);
         else
-            holder.userStats.setText(item.getSubsubContent());
+            holder.subsubcontent.setText(item.getSubsubContent());
 
         if (callback != null) {
             view.setOnClickListener(new View.OnClickListener() {
@@ -92,19 +92,17 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardVi
 
     class CardViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
-        TextView title, content, broadcastTime, userStats;
-        ImageView flag;
+        TextView title, content, subcontent, subsubcontent;
+        ImageView icon;
 
         CardViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.old_push_notification_card);
             title = (TextView) itemView.findViewById(R.id.card_title);
             content = (TextView) itemView.findViewById(R.id.card_content);
-
-            broadcastTime = (TextView) itemView.findViewById(R.id.card_broadcast_time);
-            userStats = (TextView) itemView.findViewById(R.id.card_user_stats);
-
-            flag = (ImageView) itemView.findViewById(R.id.card_icon);
+            subcontent = (TextView) itemView.findViewById(R.id.card_sub_content);
+            subsubcontent = (TextView) itemView.findViewById(R.id.card_sub_sub_content);
+            icon = (ImageView) itemView.findViewById(R.id.card_icon);
         }
     }
 }

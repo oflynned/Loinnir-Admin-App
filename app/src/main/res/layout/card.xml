@@ -42,17 +42,17 @@
 
                 <TextView
                     android:layout_marginTop="8dp"
-                    android:id="@+id/card_broadcast_time"
+                    android:id="@+id/card_sub_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/card_content"
                     android:text="Time Time/Time/Time" />
 
                 <TextView
-                    android:id="@+id/card_user_stats"
+                    android:id="@+id/card_sub_sub_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/card_broadcast_time"
+                    android:layout_below="@id/card_sub_content"
                     android:text="Total/Delivered" />
 
             </RelativeLayout>

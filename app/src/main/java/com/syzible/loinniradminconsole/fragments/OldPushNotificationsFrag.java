@@ -2,9 +2,11 @@ package com.syzible.loinniradminconsole.fragments;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -106,11 +108,26 @@ public class OldPushNotificationsFrag extends Fragment {
 
                         adapter = new CardViewAdapter(pushNotifications, new Callback() {
                             @Override
-                            public void onCallback(int position) {
-                                PushNotification p = (PushNotification) pushNotifications.get(position);
-                                dispatchPushNotification(p);
+                            public void onCallback(final int position) {
+                                final PushNotification p = (PushNotification) pushNotifications.get(position);
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle("Dispatch New Push Notification")
+                                        .setMessage("Click dispatch to resend this push notification." +
+                                                "\n\nNotification Title:\n" + p.getTitle() +
+                                                "\n\nNotification Content:\n" + p.getContent() +
+                                                "\n\nNotification Link:\n" + p.getUrl()
+                                        )
+                                        .setPositiveButton("Dispatch", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dispatchPushNotification(p);
+                                            }
+                                        })
+                                        .setNegativeButton("Cancel", null)
+                                        .show();
                             }
                         });
+
                         recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         progressDialog.cancel();
