@@ -53,6 +53,10 @@ public abstract class CardItem {
         return subsubContent;
     }
 
+    public boolean isIconBlank() {
+        return icon == 0;
+    }
+
     public boolean shouldDrawBackground() {
         return icon != 0 && icon != R.drawable.ic_launcher_loinnir;
     }

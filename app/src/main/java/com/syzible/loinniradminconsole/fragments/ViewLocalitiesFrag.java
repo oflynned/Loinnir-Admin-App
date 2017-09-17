@@ -21,6 +21,7 @@ import com.syzible.loinniradminconsole.networking.Endpoints;
 import com.syzible.loinniradminconsole.networking.RestClient;
 import com.syzible.loinniradminconsole.objects.CardItem;
 import com.syzible.loinniradminconsole.objects.Locality;
+import com.syzible.loinniradminconsole.objects.Town;
 import com.syzible.loinniradminconsole.views.CardViewAdapter;
 
 import org.json.JSONArray;
@@ -85,7 +86,7 @@ public class ViewLocalitiesFrag extends Fragment {
 
                         for (int i = 0; i < response.length(); i++) {
                             try {
-                                localities.add(new Locality(getActivity(), response.getJSONObject(i)));
+                                localities.add(new Town(getActivity(), response.getJSONObject(i)));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             } finally {

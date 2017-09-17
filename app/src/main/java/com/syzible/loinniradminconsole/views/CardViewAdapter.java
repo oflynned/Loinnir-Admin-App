@@ -55,20 +55,18 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardVi
         CardItem item = list.get(position);
         holder.title.setText(item.getTitle());
         holder.content.setText(item.getContent());
-        holder.icon.setImageResource(item.getIcon());
+
+        if (item.isIconBlank()) holder.icon.setVisibility(View.GONE);
+        else holder.icon.setImageResource(item.getIcon());
 
         if (item.shouldDrawBackground())
             holder.icon.setBackground(context.getResources().getDrawable(R.drawable.rounded_corners_background));
 
-        if (item.getSubContent() == null)
-            holder.subcontent.setVisibility(View.GONE);
-        else
-            holder.subcontent.setText(item.getSubContent());
+        if (item.getSubContent() == null) holder.subcontent.setVisibility(View.GONE);
+        else holder.subcontent.setText(item.getSubContent());
 
-        if (item.getSubsubContent() == null)
-            holder.subsubcontent.setVisibility(View.GONE);
-        else
-            holder.subsubcontent.setText(item.getSubsubContent());
+        if (item.getSubsubContent() == null) holder.subsubcontent.setVisibility(View.GONE);
+        else holder.subsubcontent.setText(item.getSubsubContent());
 
         if (callback != null) {
             view.setOnClickListener(new View.OnClickListener() {

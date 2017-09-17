@@ -20,6 +20,7 @@ import com.syzible.loinniradminconsole.helpers.JSONUtils;
 import com.syzible.loinniradminconsole.networking.Endpoints;
 import com.syzible.loinniradminconsole.networking.RestClient;
 import com.syzible.loinniradminconsole.objects.CardItem;
+import com.syzible.loinniradminconsole.objects.County;
 import com.syzible.loinniradminconsole.objects.Locality;
 import com.syzible.loinniradminconsole.views.CardViewAdapter;
 
@@ -94,7 +95,7 @@ public class ViewCountiesFrag extends Fragment {
                                         wasAdded = true;
 
                                 if (!wasAdded) {
-                                    localities.add(new Locality(getActivity(), response.getJSONObject(i)));
+                                    localities.add(new County(getActivity(), response.getJSONObject(i)));
                                     addedCounties.add(county);
                                 }
 
