@@ -70,11 +70,11 @@ public class ToolsFrag extends Fragment {
             }
         });
 
-        Button userIntensitySpread = (Button) view.findViewById(R.id.button_user_intensity_spread);
-        userIntensitySpread.setOnClickListener(new View.OnClickListener() {
+        Button userList = (Button) view.findViewById(R.id.button_user_list);
+        userList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FragmentUtils.setFragmentBackstack(getFragmentManager(), new UserListFrag());
             }
         });
 

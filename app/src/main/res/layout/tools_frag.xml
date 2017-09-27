@@ -101,11 +101,11 @@
             android:layout_below="@+id/user_message_stats_area">
 
             <Button
-                android:id="@+id/button_users_per_locality"
+                android:id="@+id/button_user_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Users per Locality" />
+                android:text="User List" />
 
             <Button
                 android:id="@+id/button_users_per_county"

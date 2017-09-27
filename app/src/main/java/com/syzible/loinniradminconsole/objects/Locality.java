@@ -2,9 +2,6 @@ package com.syzible.loinniradminconsole.objects;
 
 import android.content.Context;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Created by ed on 08/09/2017.
  */
@@ -27,7 +24,8 @@ public class Locality extends CardItem {
     }
 
     public static int getCountyFlag(Context context, String county) {
-        String countyFlagFile = getCountyFileName(county);
+        String formattedCounty = county.equals("abroad") ? "Éire": county;
+        String countyFlagFile = getCountyFileName(formattedCounty);
         return context.getResources().getIdentifier(countyFlagFile, "drawable", context.getPackageName());
     }
 }

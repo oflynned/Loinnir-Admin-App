@@ -11,8 +11,8 @@ import org.json.JSONObject;
 
 public class Town extends Locality {
     public Town(Context context, JSONObject o) throws JSONException {
-        super(o.getString("county").equals("abroad") ? "Éire" : o.getString("county"),
-                o.getString("locality").equals("abroad") ? "Abroad" : o.getString("locality"),
+        super(o.getString("locality").equals("abroad") ? "Abroad" : o.getString("locality"),
+                o.getString("county").equals("abroad") ? "Éire" : o.getString("county"),
                 o.getInt("locality_count") + (o.getInt("locality_count") == 1 ? " user " : " users ") + "in this locality",
                 o.getInt("county_count") + (o.getInt("county_count") == 1 ? " user " : " users ") + "in this county",
                 getCountyFlag(context, o.getString("county").equals("abroad") ? "Éire" : o.getString("county")));
