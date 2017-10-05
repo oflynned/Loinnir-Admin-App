@@ -22,7 +22,7 @@ public class PushNotification extends CardItem {
                 "UserData count: " + o.getInt("user_count_at_this_time") + " / " +
                 "Users delivered to: " + o.getInt("user_count_delivered_to"));
         this.isEmptyPlaceholder = false;
-        this.url = o.getString("push_notification_link");
+        this.url = o.getString("link");
         this.timeCreated = o.getLong("broadcast_time");
     }
 

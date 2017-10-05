@@ -162,11 +162,6 @@ public class LocalityFrag extends Fragment {
                             }
                         }
                         adapter.addToEnd(messages, true);
-
-                        System.out.println(rawJsonResponse);
-                        for (Message message : messages)
-                            System.out.println(EncodingUtils.decodeText(message.getText()));
-
                         progressBar.setVisibility(View.INVISIBLE);
                     }
 

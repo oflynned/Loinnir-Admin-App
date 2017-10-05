@@ -38,6 +38,6 @@ public class Endpoints {
     public static final String GET_LOCALITY_MESSAGES_BY_LOCALITY = API_URL + "/admin/get-locality-chat-by-name";
     public static final String GET_LOCALITY_MESSAGES_LAST_24_HOURS = API_URL + "/admin/locality-messages-last-24-hours";
 
-    public static final String BROADCAST_PUSH_NOTIFICATION = API_URL + "/broadcast-push-notification";
-    public static final String GET_ALL_PUSH_NOTIFICATIONS = API_URL + "/get-past-push-notifications";
+    public static final String BROADCAST_PUSH_NOTIFICATION = API_URL + "/admin/broadcast-push-notification";
+    public static final String GET_ALL_PUSH_NOTIFICATIONS = API_URL + "/admin/get-past-push-notifications";
 }

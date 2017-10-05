@@ -138,6 +138,7 @@ public class NewPushNotificationFrag extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
+        System.out.println(payload);
         RestClient.post(getActivity(),
                 Endpoints.BROADCAST_PUSH_NOTIFICATION,
                 payload,
