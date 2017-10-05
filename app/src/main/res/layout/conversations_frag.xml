@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <Spinner
-        android:id="@+id/locality_name_spinner"
+        android:id="@+id/name_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="32sp"
@@ -19,7 +19,7 @@
         android:id="@+id/messages_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/locality_name_spinner"
+        android:layout_below="@+id/name_spinner"
         app:textAutoLink="all" />
 
     <ProgressBar

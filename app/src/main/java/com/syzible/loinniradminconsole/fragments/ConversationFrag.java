@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -41,7 +42,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by ed on 08/09/2017.
  */
 
-public class LocalityFrag extends Fragment {
+public class ConversationFrag extends Fragment {
     private View view;
     private ArrayList<Message> messages = new ArrayList<>();
     private ArrayList<Message> paginatedMessages = new ArrayList<>();
@@ -50,7 +51,7 @@ public class LocalityFrag extends Fragment {
 
     private ProgressBar progressBar;
     private Spinner spinner;
-    private ArrayList<String> localities = new ArrayList<>();
+    private ArrayList<String> idPairs = new ArrayList<>();
 
     @Nullable
     @Override
@@ -81,39 +82,38 @@ public class LocalityFrag extends Fragment {
 
     private void setSpinnerData() {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
-                getActivity(), android.R.layout.simple_spinner_item, localities);
+                getActivity(), android.R.layout.simple_spinner_item, idPairs);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
     }
 
-    private String getSpinnerItem(int position) {
-        return localities.get(position);
+    private String[] getSpinnerItem(int position) {
+        return idPairs.get(position).split(" ");
     }
 
     private void loadAreaNames() {
         RestClient.post(getActivity(),
-                Endpoints.GET_AREA_DATA,
+                Endpoints.GET_PARTNER_ID_PAIRS,
                 JSONUtils.getAuthPayload(getActivity()),
                 new BaseJsonHttpResponseHandler<JSONArray>() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                localities.add(response.getJSONObject(i).getString("locality"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                String pair = "";
+                                for (int j = 0; j < response.getJSONArray(i).length(); j++) {
+                                    pair += response.getJSONArray(i).getString(j) + " ";
+                                }
+                                pair = pair.trim();
+                                idPairs.add(pair);
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
                         setSpinnerData();
 
-                        for (int i=0; i<localities.size(); i++) {
-                            if (localities.get(i).equals("Baile Átha Cliath")) {
-                                spinner.setSelection(i);
-                            }
-                        }
-
-                        loadMessages("Baile Átha Cliath");
+                        loadMessages(idPairs.get(0).split(" "));
                     }
 
                     @Override
@@ -134,11 +134,11 @@ public class LocalityFrag extends Fragment {
         messagesList.setAdapter(adapter);
     }
 
-    private void loadMessages(String locality) {
+    private void loadMessages(String[] pair) {
         setupAdapter(view);
         RestClient.post(getActivity(),
-                Endpoints.GET_LOCALITY_MESSAGES_BY_LOCALITY,
-                JSONUtils.getAuthLocalityPayload(getActivity(), EncodingUtils.encodeText(locality)),
+                Endpoints.GET_PARTNER_ID_PAIR_CONVERSATION,
+                JSONUtils.getAuthConversationPayload(getActivity(), pair),
                 new BaseJsonHttpResponseHandler<JSONArray>() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONArray response) {
@@ -157,6 +157,7 @@ public class LocalityFrag extends Fragment {
                                 e.printStackTrace();
                             }
                         }
+                        Collections.reverse(messages);
                         adapter.addToEnd(messages, true);
                         progressBar.setVisibility(View.INVISIBLE);
                     }

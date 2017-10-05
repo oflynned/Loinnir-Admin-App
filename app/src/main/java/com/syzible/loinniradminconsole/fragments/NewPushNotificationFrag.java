@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
 import com.syzible.loinniradminconsole.R;
+import com.syzible.loinniradminconsole.helpers.EncodingUtils;
 import com.syzible.loinniradminconsole.helpers.LocalPrefs;
 import com.syzible.loinniradminconsole.networking.Endpoints;
 import com.syzible.loinniradminconsole.networking.RestClient;
@@ -126,9 +127,9 @@ public class NewPushNotificationFrag extends Fragment {
         try {
             payload.put("username", LocalPrefs.getUsername(getActivity()));
             payload.put("secret", LocalPrefs.getSecret(getActivity()));
-            payload.put("push_notification_title", getTitleField());
-            payload.put("push_notification_content", getContentField());
-            payload.put("push_notification_link", getUrlField());
+            payload.put("push_notification_title", EncodingUtils.encodeText(getTitleField()));
+            payload.put("push_notification_content", EncodingUtils.encodeText(getContentField()));
+            payload.put("push_notification_link", EncodingUtils.encodeText(getUrlField()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

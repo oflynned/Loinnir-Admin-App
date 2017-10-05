@@ -10,6 +10,10 @@
             android:id="@+id/nav_locality_chats"
             android:icon="@drawable/ic_menu_manage"
             android:title="Locality Chats" />
+        <item
+            android:id="@+id/nav_partner_chats"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Partner Chats" />
     </group>
 
     <item android:title="Actions">
