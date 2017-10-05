@@ -12,10 +12,21 @@ import org.json.JSONObject;
 public class JSONUtils {
 
     public static JSONObject getAuthPayload(Context context) {
-        return getAuthPayload(context, LocalPrefs.getUsername(context), LocalPrefs.getSecret(context));
+        return getAuthPayload(LocalPrefs.getUsername(context), LocalPrefs.getSecret(context));
     }
 
-    public static JSONObject getAuthPayload(Context context, String username, String secret) {
+    public static JSONObject getAuthLocalityPayload(Context context, String locality) {
+        JSONObject o = getAuthPayload(LocalPrefs.getUsername(context), LocalPrefs.getSecret(context));
+        try {
+            o.put("locality", locality);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return o;
+    }
+
+    public static JSONObject getAuthPayload(String username, String secret) {
         JSONObject o = new JSONObject();
         try {
             o.put("username", username);

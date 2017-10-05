@@ -17,13 +17,11 @@ import com.syzible.loinniradminconsole.helpers.JSONUtils;
 import com.syzible.loinniradminconsole.networking.Endpoints;
 import com.syzible.loinniradminconsole.networking.RestClient;
 import com.syzible.loinniradminconsole.objects.CardItem;
-import com.syzible.loinniradminconsole.objects.Statistic;
-import com.syzible.loinniradminconsole.objects.User;
+import com.syzible.loinniradminconsole.objects.UserData;
 import com.syzible.loinniradminconsole.views.CardViewAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,7 +83,7 @@ public class UserListFrag extends Fragment {
 
                         try {
                             for (int i = 0; i < response.length(); i++) {
-                                users.add(new User(getActivity(), response.getJSONObject(i)));
+                                users.add(new UserData(getActivity(), response.getJSONObject(i)));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

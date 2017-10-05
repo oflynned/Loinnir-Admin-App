@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground"
+    android:orientation="vertical">
+
+    <Spinner
+        android:id="@+id/locality_name_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="16dp"/>
+
+    <com.stfalcon.chatkit.messages.MessagesList
+        android:id="@+id/messages_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/locality_name_spinner"
+        app:textAutoLink="all" />
+
+    <ProgressBar
+        android:id="@+id/conversations_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="true" />
+</RelativeLayout>

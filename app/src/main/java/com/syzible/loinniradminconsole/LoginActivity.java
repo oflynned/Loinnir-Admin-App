@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (validateFields(username, secret)) {
                     final Context context = LoginActivity.this;
-                    JSONObject payload = JSONUtils.getAuthPayload(context, username, secret);
+                    JSONObject payload = JSONUtils.getAuthPayload(username, secret);
                     RestClient.post(context, Endpoints.AUTHENTICATE, payload, new BaseJsonHttpResponseHandler<JSONObject>() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String rawJsonResponse, JSONObject response) {

@@ -19,7 +19,7 @@ public class PushNotification extends CardItem {
 
     public PushNotification(JSONObject o) throws JSONException{
         super(o.getString("title"), o.getString("content"), o.getString("link"),
-                "User count: " + o.getInt("user_count_at_this_time") + " / " +
+                "UserData count: " + o.getInt("user_count_at_this_time") + " / " +
                 "Users delivered to: " + o.getInt("user_count_delivered_to"));
         this.isEmptyPlaceholder = false;
         this.url = o.getString("push_notification_link");

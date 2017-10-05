@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.syzible.loinniradminconsole.fragments.LocalityFrag;
 import com.syzible.loinniradminconsole.fragments.ToolsFrag;
 import com.syzible.loinniradminconsole.helpers.FragmentUtils;
 import com.syzible.loinniradminconsole.helpers.LocalPrefs;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationView.getMenu().getItem(0).setChecked(true);
-        FragmentUtils.setFragment(getFragmentManager(), new ToolsFrag());
+        FragmentUtils.setFragment(getFragmentManager(), new LocalityFrag());
     }
 
     @Override
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_locality_chats) {
-
+            FragmentUtils.setFragment(getFragmentManager(), new LocalityFrag());
         } else if (id == R.id.nav_tools) {
             FragmentUtils.setFragment(getFragmentManager(), new ToolsFrag());
         } else if (id == R.id.nav_store) {

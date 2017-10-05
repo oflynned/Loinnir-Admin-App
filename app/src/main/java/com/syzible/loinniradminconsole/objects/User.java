@@ -1,37 +1,96 @@
 package com.syzible.loinniradminconsole.objects;
 
-import android.content.Context;
+import com.google.android.gms.maps.model.LatLng;
+import com.stfalcon.chatkit.commons.models.IUser;
+import com.syzible.loinniradminconsole.helpers.EncodingUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.syzible.loinniradminconsole.helpers.EncodingUtils.decodeText;
-import static com.syzible.loinniradminconsole.objects.Locality.getCountyFlag;
-
 /**
- * Created by ed on 10/09/2017.
+ * Created by ed on 05/10/2017.
  */
 
-public class User extends CardItem {
+public class User implements IUser {
 
-    public User(Context context, JSONObject o) throws JSONException {
-        this(o.getString("forename"),
-                o.getString("surname"),
-                (o.getString("locality").equals("abroad") ? "Abroad" : o.getString("locality")) + ", " + (o.getString("county").equals("abroad") ? "Éire" : o.getString("county")),
-                "Total Messages: " + o.getInt("total_message_count") +
-                        "\nLocality Messages: " + o.getInt("total_locality_message_count") +
-                        "\nPartner Messages: " + o.getInt("total_partner_message_count") +
-                        "\nPartner Count: " + o.getJSONArray("partners").length(),
-                (o.has("last_active") ? "Last Active: " + o.getLong("last_active") : "") +
-                        "\nMember Since: " + o.getLong("time_created"),
-                getCountyFlag(context, o.getString("county")));
+    private String fb_id;
+    private float longitude, latitude;
+    private LatLng location;
+    private String forename;
+    private String surname;
+    private String avatar;
+    private String locality, county;
+    private boolean isFemale;
+
+    public User(String fb_id) {
+        this.fb_id = fb_id;
     }
 
-    private User(String forename, String surname, String location, String countStats, String timeStats, int icon) {
-        this(decodeText(forename) + " " + decodeText(surname), location, countStats, timeStats, icon);
+    public User(JSONObject data) throws JSONException {
+        this.fb_id = data.getString("fb_id");
+        this.longitude = (float) data.getDouble("lng");
+        this.latitude = (float) data.getDouble("lat");
+        this.location = new LatLng(latitude, longitude);
+        this.forename = EncodingUtils.decodeText(data.getString("forename"));
+        this.surname = EncodingUtils.decodeText(data.getString("surname"));
+        this.isFemale = data.getString("gender").equals("female");
+        this.avatar = data.getString("profile_pic");
+
+        if (data.getString("locality").equals("abroad"))
+            this.locality = "Thar Sáile";
+        else
+            this.locality = data.getString("locality");
+
+        if (data.getString("county").equals("abroad"))
+            this.county = "Éire";
+        else
+            this.county = data.getString("county");
     }
 
-    private User(String name, String location, String counts, String timeStats, int icon) {
-        super(name, location, counts, timeStats, icon);
+    @Override
+    public String getId() {
+        return fb_id;
+    }
+
+    @Override
+    public String getName() {
+        return forename + " " + surname;
+    }
+
+    @Override
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public String getLocality() {
+        return locality;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public String getForename() {
+        return forename;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public boolean isFemale() {
+        return isFemale;
     }
 }
