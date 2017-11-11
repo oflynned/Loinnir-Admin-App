@@ -90,37 +90,24 @@ public class NewPushNotificationFrag extends Fragment {
         });
 
         Button pnDispatchButton = (Button) view.findViewById(R.id.button_dispatch_new_push_notification);
-        pnDispatchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!areFieldsAcceptable()) {
-                    Toast.makeText(getActivity(), "Fields unacceptable, make sure title and content have text", Toast.LENGTH_SHORT).show();
-                } else {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("Confirm Dispatch Push Notification")
-                            .setMessage(
-                                    "Notification Title:\n" + getTitleField() +
-                                    "\n\nNotification Content:\n" + getContentField() +
-                                    "\n\nNotification Link:\n" + getUrlField())
-                            .setPositiveButton("Dispatch", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dispatchPushNotification();
-                                }
-                            })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            })
-                            .show();
-                }
+        pnDispatchButton.setOnClickListener((v) -> {
+            if (!areFieldsAcceptable()) {
+                Toast.makeText(getActivity(), "Fields unacceptable, make sure title and content have text", Toast.LENGTH_SHORT).show();
+            } else {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Confirm Dispatch Push Notification")
+                        .setMessage(
+                                "Notification Title:\n" + getTitleField() +
+                                        "\n\nNotification Content:\n" + getContentField() +
+                                        "\n\nNotification Link:\n" + getUrlField())
+                        .setPositiveButton("Dispatch", (dialog, which) -> dispatchPushNotification())
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
         });
 
         return view;
-    }
+}
 
     private void dispatchPushNotification() {
         JSONObject payload = new JSONObject();

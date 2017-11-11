@@ -65,12 +65,9 @@ public class OldPushNotificationsFrag extends Fragment {
         loadData();
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.card_container_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadData();
-                swipeRefreshLayout.setRefreshing(false);
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            loadData();
+            swipeRefreshLayout.setRefreshing(false);
         });
 
 
@@ -106,26 +103,18 @@ public class OldPushNotificationsFrag extends Fragment {
 
                         Collections.reverse(pushNotifications);
 
-                        adapter = new CardViewAdapter(pushNotifications, new Callback() {
-                            @Override
-                            public void onCallback(final int position) {
-                                final PushNotification p = (PushNotification) pushNotifications.get(position);
-                                new AlertDialog.Builder(getActivity())
-                                        .setTitle("Dispatch New Push Notification")
-                                        .setMessage("Click dispatch to resend this push notification." +
-                                                "\n\nNotification Title:\n" + p.getTitle() +
-                                                "\n\nNotification Content:\n" + p.getContent() +
-                                                "\n\nNotification Link:\n" + p.getUrl()
-                                        )
-                                        .setPositiveButton("Dispatch", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dispatchPushNotification(p);
-                                            }
-                                        })
-                                        .setNegativeButton("Cancel", null)
-                                        .show();
-                            }
+                        adapter = new CardViewAdapter(pushNotifications, position -> {
+                            final PushNotification p = (PushNotification) pushNotifications.get(position);
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("Dispatch New Push Notification")
+                                    .setMessage("Click dispatch to resend this push notification." +
+                                            "\n\nNotification Title:\n" + p.getTitle() +
+                                            "\n\nNotification Content:\n" + p.getContent() +
+                                            "\n\nNotification Link:\n" + p.getUrl()
+                                    )
+                                    .setPositiveButton("Dispatch", (dialog, which) -> dispatchPushNotification(p))
+                                    .setNegativeButton("Cancel", null)
+                                    .show();
                         });
 
                         recyclerView.setAdapter(adapter);

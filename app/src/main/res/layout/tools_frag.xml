@@ -85,14 +85,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="View User Stats" />
+                android:text="User Stats" />
 
             <Button
                 android:id="@+id/button_view_message_stats"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="View Message Stats" />
+                android:text="Message Stats" />
         </LinearLayout>
 
         <LinearLayout
@@ -115,41 +115,4 @@
                 android:text="Users per County" />
         </LinearLayout>
     </RelativeLayout>
-
-
-    <RelativeLayout
-        android:id="@+id/map_area"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp">
-
-        <TextView
-            android:id="@+id/maps_area_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="Maps Area"
-            android:textSize="18sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/maps_area_title">
-
-            <Button
-                android:id="@+id/button_user_intensity_spread"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="User Intensity Spread" />
-
-            <Button
-                android:id="@+id/button_locality_spread"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Locality Area Spread" />
-        </LinearLayout>
-    </RelativeLayout>
-
 </LinearLayout>

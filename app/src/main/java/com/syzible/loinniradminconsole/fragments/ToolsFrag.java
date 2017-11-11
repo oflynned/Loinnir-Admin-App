@@ -23,68 +23,25 @@ public class ToolsFrag extends Fragment {
         View view = inflater.inflate(R.layout.tools_frag, container, false);
 
         Button newPushNotificationButton = (Button) view.findViewById(R.id.button_new_push_notification);
-        newPushNotificationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentUtils.setFragmentBackstack(getFragmentManager(), new NewPushNotificationFrag());
-            }
-        });
+        newPushNotificationButton.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new NewPushNotificationFrag()));
 
         Button oldPushNotificationsButton = (Button) view.findViewById(R.id.button_past_push_notifications);
-        oldPushNotificationsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentUtils.setFragmentBackstack(getFragmentManager(), new OldPushNotificationsFrag());
-            }
-        });
+        oldPushNotificationsButton.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new OldPushNotificationsFrag()));
 
         Button showLocalitiesFragment = (Button) view.findViewById(R.id.button_view_localities);
-        showLocalitiesFragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentUtils.setFragmentBackstack(getFragmentManager(), new ViewLocalitiesFrag());
-            }
-        });
+        showLocalitiesFragment.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new ViewLocalitiesFrag()));
 
         Button showCountiesFragment = (Button) view.findViewById(R.id.button_view_counties);
-        showCountiesFragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentUtils.setFragmentBackstack(getFragmentManager(), new ViewCountiesFrag());
-            }
-        });
+        showCountiesFragment.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new ViewCountiesFrag()));
 
         Button showUserStatsFragment = (Button) view.findViewById(R.id.button_view_user_stats);
-        showUserStatsFragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentUtils.setFragmentBackstack(getFragmentManager(), new UserStatsFrag());
-            }
-        });
+        showUserStatsFragment.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new UserStatsFrag()));
 
         Button showMessageStatsFragment = (Button) view.findViewById(R.id.button_view_message_stats);
-        showMessageStatsFragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentUtils.setFragmentBackstack(getFragmentManager(), new MessageStatsFrag());
-            }
-        });
+        showMessageStatsFragment.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new MessageStatsFrag()));
 
         Button userList = (Button) view.findViewById(R.id.button_user_list);
-        userList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentUtils.setFragmentBackstack(getFragmentManager(), new UserListFrag());
-            }
-        });
-
-        Button localitySpread = (Button) view.findViewById(R.id.button_locality_spread);
-        localitySpread.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        userList.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new UserListFrag()));
 
         return view;
     }

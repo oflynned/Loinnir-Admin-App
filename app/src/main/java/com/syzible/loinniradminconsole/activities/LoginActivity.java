@@ -1,4 +1,4 @@
-package com.syzible.loinniradminconsole;
+package com.syzible.loinniradminconsole.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.loopj.android.http.BaseJsonHttpResponseHandler;
+import com.syzible.loinniradminconsole.R;
 import com.syzible.loinniradminconsole.helpers.JSONUtils;
 import com.syzible.loinniradminconsole.helpers.LocalPrefs;
 import com.syzible.loinniradminconsole.networking.Endpoints;

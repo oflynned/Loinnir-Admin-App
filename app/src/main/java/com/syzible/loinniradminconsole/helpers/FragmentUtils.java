@@ -14,14 +14,14 @@ public class FragmentUtils {
     public static void setFragment(FragmentManager manager, Fragment fragment) {
         if (manager != null)
             manager.beginTransaction()
-                    .replace(R.id.fragment_frame, fragment)
+                    .replace(R.id.frame_holder, fragment)
                     .commit();
     }
 
     public static void setFragmentBackstack(FragmentManager manager, Fragment fragment) {
         if (manager != null)
             manager.beginTransaction()
-                    .replace(R.id.fragment_frame, fragment)
+                    .replace(R.id.frame_holder, fragment)
                     .addToBackStack(fragment.getClass().getName())
                     .commit();
     }
