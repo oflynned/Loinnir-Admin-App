@@ -22,26 +22,29 @@ public class ToolsFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tools_frag, container, false);
 
-        Button newPushNotificationButton = (Button) view.findViewById(R.id.button_new_push_notification);
-        newPushNotificationButton.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new NewPushNotificationFrag()));
+        view.findViewById(R.id.button_new_push_notification).setOnClickListener(
+                v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new NewPushNotificationFrag()));
 
-        Button oldPushNotificationsButton = (Button) view.findViewById(R.id.button_past_push_notifications);
-        oldPushNotificationsButton.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new OldPushNotificationsFrag()));
+        view.findViewById(R.id.button_past_push_notifications).setOnClickListener(
+                v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new OldPushNotificationsFrag()));
 
-        Button showLocalitiesFragment = (Button) view.findViewById(R.id.button_view_localities);
-        showLocalitiesFragment.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new ViewLocalitiesFrag()));
+        view.findViewById(R.id.button_view_localities).setOnClickListener(
+                v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new ViewLocalitiesFrag()));
 
-        Button showCountiesFragment = (Button) view.findViewById(R.id.button_view_counties);
-        showCountiesFragment.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new ViewCountiesFrag()));
+        view.findViewById(R.id.button_view_counties).setOnClickListener(
+                v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new ViewCountiesFrag()));
 
-        Button showUserStatsFragment = (Button) view.findViewById(R.id.button_view_user_stats);
-        showUserStatsFragment.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new UserStatsFrag()));
+        view.findViewById(R.id.button_view_user_stats).setOnClickListener(
+                v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new UserStatsFrag()));
 
-        Button showMessageStatsFragment = (Button) view.findViewById(R.id.button_view_message_stats);
-        showMessageStatsFragment.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new MessageStatsFrag()));
+        view.findViewById(R.id.button_view_message_stats).setOnClickListener(
+                v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new MessageStatsFrag()));
 
-        Button userList = (Button) view.findViewById(R.id.button_user_list);
-        userList.setOnClickListener(v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new UserListFrag()));
+        view.findViewById(R.id.button_user_list).setOnClickListener(
+                v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new UserListFrag()));
+
+        view.findViewById(R.id.button_app_suggestions).setOnClickListener(
+                v -> FragmentUtils.setFragmentBackstack(getFragmentManager(), new SuggestionsFrag()));
 
         return view;
     }

@@ -40,4 +40,6 @@ public class Endpoints {
 
     public static final String BROADCAST_PUSH_NOTIFICATION = API_URL + "/admin/broadcast-push-notification";
     public static final String GET_ALL_PUSH_NOTIFICATIONS = API_URL + "/admin/get-past-push-notifications";
+
+    public static final String GET_ALL_SUGGESTIONS = API_URL + "/services/get-suggestions";
 }

@@ -108,11 +108,11 @@
                 android:text="User List" />
 
             <Button
-                android:id="@+id/button_users_per_county"
+                android:id="@+id/button_app_suggestions"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Users per County" />
+                android:text="App Suggestions" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

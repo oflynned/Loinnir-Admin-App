@@ -117,6 +117,10 @@ public class NewPushNotificationFrag extends Fragment {
             payload.put("push_notification_title", EncodingUtils.encodeText(getTitleField()));
             payload.put("push_notification_content", EncodingUtils.encodeText(getContentField()));
             payload.put("push_notification_link", EncodingUtils.encodeText(getUrlField()));
+
+            // TODO
+            if (getTargetField() != null)
+                payload.put("push_notification_target_user_filter", EncodingUtils.encodeText(getTargetField()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -164,6 +168,11 @@ public class NewPushNotificationFrag extends Fragment {
     private String getUrlField() {
         String pnUrl = pnUrlEditText.getText().toString().trim();
         return pnUrl.length() == 0 ? "https://www.facebook.com/LoinnirApp" : pnUrl;
+    }
+
+    // TODO
+    private String getTargetField() {
+        return null;
     }
 
     private boolean areFieldsAcceptable() {
